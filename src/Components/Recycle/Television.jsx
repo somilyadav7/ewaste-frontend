@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const SmartphoneRecyclingForm = () => {
+const TelevisionRecyclingForm = () => {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [recycleItemPrice, setRecycleItemPrice] = useState("");
   const [pickupDate, setPickupDate] = useState("");
@@ -47,7 +47,7 @@ const SmartphoneRecyclingForm = () => {
   return (
     <div className="container mx-auto p-8">
       <ToastContainer />
-      <h1 className="text-4xl font-bold mb-6 text-center">Smartphone Recycling</h1>
+      <h1 className="text-4xl font-bold mb-6 text-center">Television Recycling</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left Column */}
         <div>
@@ -64,11 +64,11 @@ const SmartphoneRecyclingForm = () => {
               >
                 <option value="">Select Brand</option>
                 <option value="Samsung">Samsung</option>
-                <option value="Apple">Apple</option>
-                <option value="Mi">Mi</option>
-                <option value="Motorola">Motorola</option>
-                <option value="OnePlus">One Plus</option>
-                <option value="Other">Other</option>
+                <option value="LG">LG</option>
+                <option value="Sony">Sony</option>
+                <option value="Panasonic">Panasonic</option>
+                <option value="TCL">TCL</option>
+                <option value="Vizio">Vizio</option>
               </select>
             </div>
 
@@ -185,4 +185,4 @@ const SmartphoneRecyclingForm = () => {
   );
 };
 
-export default SmartphoneRecyclingForm;
+export default TelevisionRecyclingForm;

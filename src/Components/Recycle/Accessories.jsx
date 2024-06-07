@@ -2,8 +2,8 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const SmartphoneRecyclingForm = () => {
-  const [selectedBrand, setSelectedBrand] = useState("");
+const AccessoriesRecyclingForm = () => {
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [recycleItemPrice, setRecycleItemPrice] = useState("");
   const [pickupDate, setPickupDate] = useState("");
   const [pickupTime, setPickupTime] = useState("");
@@ -17,7 +17,7 @@ const SmartphoneRecyclingForm = () => {
 
     // Perform form validation
     if (
-      selectedBrand &&
+      selectedCategory&&
       recycleItemPrice &&
       pickupDate &&
       pickupTime &&
@@ -31,7 +31,7 @@ const SmartphoneRecyclingForm = () => {
         setIsLoading(false);
         toast.success("Form submitted successfully!");
         // Reset form fields
-        setSelectedBrand("");
+        setSelectedCategory("");
         setRecycleItemPrice("");
         setPickupDate("");
         setPickupTime("");
@@ -54,20 +54,22 @@ const SmartphoneRecyclingForm = () => {
           <form onSubmit={handleFormSubmit} className="grid grid-cols-1 gap-4">
             <div>
               <label htmlFor="brand" className="block font-semibold mb-1">
-                Select Brand:
+                Select Category:
               </label>
               <select
                 id="brand"
-                value={selectedBrand}
-                onChange={(e) => setSelectedBrand(e.target.value)}
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
                 className="w-full p-2 border rounded"
               >
-                <option value="">Select Brand</option>
-                <option value="Samsung">Samsung</option>
-                <option value="Apple">Apple</option>
-                <option value="Mi">Mi</option>
-                <option value="Motorola">Motorola</option>
-                <option value="OnePlus">One Plus</option>
+                <option value="">Select Category</option>
+                <option value="Headphones">Headphones</option>
+                <option value="Chargers">Chargers</option>
+                <option value="Laptop Bags">Laptop Bags</option>
+                <option value="External Hard Drives">External Hard Drives</option>
+                <option value="Smartwatches">Smartwatches</option>
+                <option value="Mouse and Keyboards">Mouse and Keyboards</option>
+                <option value="Power Banks">Power Banks</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -185,4 +187,4 @@ const SmartphoneRecyclingForm = () => {
   );
 };
 
-export default SmartphoneRecyclingForm;
+export default AccessoriesRecyclingForm;

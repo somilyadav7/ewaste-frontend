@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -7,9 +8,9 @@ const Footer = () => {
         <div className="flex flex-col lg:flex-row justify-between mb-8">
           {/* ELocate Description */}
           <div className="mb-4 lg:w-1/3">
-            <h3 className="text-lg font-bold mb-2">E-Waste EcoFinder: Transforming E-Waste Management</h3>
+            <h3 className="text-lg font-bold mb-2">E-Waste EcoFinder</h3>
             <p className="text-sm">
-              Find E-waste facilities effortlessly with our platform. Your key to responsible recycling and sustainability.
+              Transforming E-Waste Management. Find E-waste facilities effortlessly with our platform. Your key to responsible recycling and sustainability.
             </p>
           </div>
 
@@ -17,12 +18,12 @@ const Footer = () => {
           <div className="lg:w-1/3">
             <h3 className="text-lg font-bold mb-4">Our Services</h3>
             <ul className="text-sm">
-              <li>Smartphone Recycle</li>
-              <li>Laptop Recycle</li>
-              <li>Accessories Recycle</li>
-              <li>Television Recycle</li>
-              <li>Refrigerator Recycle</li>
-              <li>Other Electronic Accessories</li>
+              <li><Link to="/recycle/smartphone" className="hover:underline">Smartphone Recycle</Link></li>
+              <li><Link to="/recycle/laptop" className="hover:underline">Laptop Recycle</Link></li>
+              <li><Link to="/recycle/accessories" className="hover:underline">Accessories Recycle</Link></li>
+              <li><Link to="/recycle/television" className="hover:underline">Television Recycle</Link></li>
+              <li><Link to="/recycle/refrigerator" className="hover:underline">Refrigerator Recycle</Link></li>
+              <li><Link to="/recycle/other" className="hover:underline">Other Electronic Accessories</Link></li>
             </ul>
           </div>
 
@@ -33,11 +34,11 @@ const Footer = () => {
             <p>Hubballi, Karnataka, 580031</p>
             <p><i className="fa-solid fa-phone"></i> +911234567890</p>
             <p><i className="fa-solid fa-envelope"></i> contact@ewaste-eco.com</p>
-            <div className="p-2">
-              <i className="fa-brands fa-instagram p-2"></i>
-              <i className="fa-brands fa-x-twitter p-2"></i>
-              <i className="fa-brands fa-facebook p-2"></i>
-              <i className="fa-brands fa-linkedin p-2"></i>
+            <div className="flex items-center space-x-2 mt-3">
+              <i className="fa-brands fa-instagram text-blue-500 hover:text-blue-700 cursor-pointer ml-36"></i>
+              <i className="fa-brands fa-twitter text-blue-500 hover:text-blue-700 cursor-pointer "></i>
+              <i className="fa-brands fa-facebook text-blue-500 hover:text-blue-700 cursor-pointer "></i>
+              <i className="fa-brands fa-linkedin text-blue-500 hover:text-blue-700 cursor-pointer"></i>
             </div>
           </div>
 
@@ -46,16 +47,12 @@ const Footer = () => {
         {/* Footer Bottom Section */}
         <div className="flex justify-between items-center border-t border-gray-600 pt-4">
           {/* Copyright */}
-          <p className="text-sm">&copy; 2024 E-Waste EcoFinder | All Rights Reserved</p>
+          <p className="text-sm">&copy; {new Date().getFullYear()} E-Waste EcoFinder. All Rights Reserved.</p>
 
           {/* Legal Links */}
           <div className="flex space-x-4">
-            <a href="#" className="text-sm hover:underline">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-sm hover:underline">
-              Terms of Use
-            </a>
+            <a href="#" className="text-sm hover:underline">Privacy Policy</a>
+            <a href="#" className="text-sm hover:underline">Terms of Use</a>
           </div>
         </div>
       </div>
@@ -64,3 +61,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

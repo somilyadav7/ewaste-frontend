@@ -11,10 +11,12 @@ import Signup from './Components/Signup';
 import Smartphone from './Components/Recycle/Smartphone';
 import Laptop from './Components/Recycle/Laptop';
 import Other from './Components/Recycle/Other';
-import Accesories from './Components/Recycle/Accesories';
+import Accessories from './Components/Recycle/Accessories';
 import Refrigerator from './Components/Recycle/Refrigerator';
-import Telivision from './Components/Recycle/Telivision';
+import Television from './Components/Recycle/Television';
 import Signin from './Components/Signin';
+import BlogDetail from './Components/education/[id]/Blog';
+import Rules from './Components/Rules';
 
 function App() {
 
@@ -33,11 +35,12 @@ function App() {
           <Route path='/signin' element={<Signin />} />
           <Route path="/recycle/Smartphone" element={<Smartphone/>} />
           <Route path="/recycle/Laptop" element={<Laptop/>} />
-          <Route path="/recycle/Accesories" element={<Accesories/>} />
+          <Route path="/recycle/Accessories" element={<Accessories/>} />
           <Route path="/recycle/Refrigerator" element={<Refrigerator/>} />
-          <Route path="/recycle/Telivision" element={<Telivision/>} />
+          <Route path="/recycle/Television" element={<Television/>} />
           <Route path="/recycle/Other" element={<Other/>} />
-
+          <Route path="/education/:id" element={<BlogDetail/>} />
+          <Route path="/rules" element={<Rules/>} />
         </Routes>
       </BrowserRouter>
     </>

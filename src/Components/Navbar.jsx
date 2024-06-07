@@ -15,6 +15,7 @@ function Navbar() {
         <Link to='/recycle' className='text-black text-xl mx-4 hover:text-blue-400 focus:text-blue-400'>Recycle</Link>
         <Link to='/ewaste' className='text-black text-xl mx-4 hover:text-blue-400 focus:text-blue-400'>E-Waste</Link>
         <Link to='/contact' className='text-black text-xl mx-4 hover:text-blue-400 focus:text-blue-400'>Contact Us</Link>
+        <Link to='/rules' className='text-black text-xl mx-4 hover:text-blue-400 focus:text-blue-400'>Rules</Link>
       </div>
 
       <div className='flex justify-end'>

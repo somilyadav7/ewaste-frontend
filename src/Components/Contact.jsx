@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Footer from './Footer';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -18,17 +19,26 @@ const Contact = () => {
       return;
     }
 
-    // Simulate form submission (replace with your actual logic)
-    setTimeout(() => {
-      // Reset form fields
-      setName('');
-      setEmail('');
-      setPhone('');
-      setMessage('');
+    const templateParams = {
+      name,
+      email,
+      phone,
+      message,
+    };
 
-      // Display success message
-      toast.success('Message sent successfully!');
-    }, 1000);
+    emailjs.send('service_302g8j4', 'template_l76238i', templateParams, 'U7U8q3Eu7wfurMdAl')
+      .then((result) => {
+        console.log(result.text);
+        toast.success('Message sent successfully!');
+        // Reset form fields
+        setName('');
+        setEmail('');
+        setPhone('');
+        setMessage('');
+      }, (error) => {
+        console.log(error.text);
+        toast.error('An error occurred, please try again.');
+      });
   };
 
   return (
