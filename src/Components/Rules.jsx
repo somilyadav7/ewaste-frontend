@@ -1,16 +1,14 @@
-import React from 'react';
-import Footer from './Footer';
-
 function Rules() {
   return (
-    <>
-        <div className="flex flex-col items-center py-8 px-4 bg-gray-50">
+    <div className="flex flex-col items-center py-8 px-4">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
-        <h2 className="text-3xl text-emerald-600 font-bold mb-6 text-center">
+        <h2 className="text-3xl text-blue-600 font-bold mb-6 text-center">
           Latest Indian E-Waste Management Rules
         </h2>
-        <div className="mb-4">
-          <p className="text-xl font-semibold mb-2">Ministry of Environment, Forest and Climate Change</p>
+        <div className="mb-4 text-left">
+          <p className="text-xl font-semibold mb-2">
+            Ministry of Environment, Forest and Climate Change
+          </p>
           <p className="text-lg mb-2">(EP Division)</p>
           <p className="text-lg mb-2">Dated the 16th March, 2022</p>
           <p className="text-lg mb-2">S.O. 1047(E)</p>
@@ -22,8 +20,8 @@ function Rules() {
           </p>
         </div>
 
-        <h3 className="text-2xl font-bold mb-4 text-emerald-600">CHAPTER I</h3>
-        <div className="mb-6">
+        <h3 className="text-2xl font-bold mb-4 text-blue-600 text-left">CHAPTER I</h3>
+        <div className="mb-6 text-left">
           <p className="text-lg font-semibold mb-2">Preliminary</p>
           <p className="text-base mb-2 font-bold">1. Short title and commencement.</p>
           <p className="text-base mb-2 ml-4">
@@ -54,8 +52,8 @@ function Rules() {
           </ul>
         </div>
 
-        <h3 className="text-2xl font-bold mb-4 text-emerald-600">CHAPTER II</h3>
-        <div className="mb-6">
+        <h3 className="text-2xl font-bold mb-4 text-blue-600 text-left">CHAPTER II</h3>
+        <div className="mb-6 text-left">
           <p className="text-lg font-semibold mb-2">Responsibility of Producers</p>
           <p className="text-base mb-2 font-bold">3. Extended producer responsibility.</p>
           <p className="text-base mb-4 ml-4">
@@ -141,9 +139,6 @@ function Rules() {
         </div>
       </div>
     </div>
-    <Footer/>
-    </>
-    
   );
 }
 

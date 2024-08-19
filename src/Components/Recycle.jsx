@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Footer from "./Footer";
 
 
 const Recycle = () => {
@@ -69,7 +68,6 @@ const Recycle = () => {
         </div>
       ))}
     </div>
-    <Footer/>
     </>
 
   );

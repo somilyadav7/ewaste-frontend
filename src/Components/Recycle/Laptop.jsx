@@ -1,100 +1,208 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { submitRecyclingForm } from "./Api";
+import emailjs from '@emailjs/browser';
+import { getEmail, getFullname } from "../Auth";
+import axios from "axios";
+import { useNearbyFacilities } from "../../Data/NearbyFacilities";
 
-const LaptopRecyclingForm = () => {
-  const [selectedBrand, setSelectedBrand] = useState("");
+const LaptopRecyclingForm = (props) => {
+  const [model, setModel] = useState("");
   const [recycleItemPrice, setRecycleItemPrice] = useState("");
   const [pickupDate, setPickupDate] = useState("");
-  const [pickupTime, setPickupTime] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const [selectedFacility, setSelectedFacility] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Dummy data for brands and models
-  const brands = [
-    "Dell",
-    "HP",
-    "Lenovo",
-    "Asus",
-    "Acer",
-    "Apple",
-    "MSI",
-    "Sony",
-    "LG",
-  ];
-
-  
-
-  // Handler for brand change
-  const handleBrandChange = (brand) => {
-    setSelectedBrand(brand);
-    setSelectedModel(""); // Reset selected model when brand changes
-  };
+  const nearbyFacilities = useNearbyFacilities();
+  const [selectedFacility, setSelectedFacility] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading] = useState(false);
+  const category = "Laptop";
 
   // Handler for form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     // Check if all required fields are filled
     if (
-      selectedBrand &&
-      recycleItemPrice &&
-      pickupDate &&
-      pickupTime &&
-      phone &&
-      address &&
-      selectedFacility
+      !model ||
+      !recycleItemPrice ||
+      !pickupDate ||
+      !phone ||
+      !address ||
+      !selectedFacility
     ) {
-      // Proceed with form submission
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        toast.success("Form submitted successfully!");
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+    if (
+      !model ||
+      !recycleItemPrice ||
+      !pickupDate ||
+      !phone ||
+      !address ||
+      !selectedFacility
+    ) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    // Validate phone number
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+      toast.error("Phone number must be exactly 10 digits.");
+      return;
+    }
+
+    // Validate recycle item price
+    if (parseFloat(recycleItemPrice) < 0) {
+      toast.error("Recycle item price cannot be negative.");
+      return;
+    }
+
+    const register = {
+      user: props.user,
+      model,
+      phone,
+      date: pickupDate,
+      price: recycleItemPrice,
+      facility: selectedFacility,
+      category,
+      location: address,
+      image:selectedImage
+    };
+
+    // Your EmailJS service ID, template ID, and Public Key
+    const serviceId = "service_zwnm4pe";
+    const templateId = "template_kn65icf";
+    const publicKey = "Ja9vgwfwNyXej5z6a";
+
+    // Create a new object that contains dynamic template params
+    const templateParams = {
+      to_name: getFullname(),
+      to_mail: getEmail(),
+      message:
+        "Your Order for recycling " +
+        model +
+        " has been placed. Wait for further update.",
+    };
+
+    // Send the email using EmailJS
+    emailjs
+      .send(serviceId, templateId, templateParams, publicKey)
+      .then((response) => {
+        console.log("Email sent successfully!", response);
+      })
+      .catch((error) => {
+        console.error("Error sending email:", error);
+      });
+    submitRecyclingForm(register)
+      .then((response) => {
+        toast.success("Order placed!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        console.log(response.data);
+
         // Reset form fields
-        setSelectedBrand("");
+        setModel("");
         setRecycleItemPrice("");
         setPickupDate("");
-        setPickupTime("");
         setPhone("");
         setAddress("");
         setSelectedFacility("");
-      }, 2000);
+        setSelectedImage(null);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 409) {
+          toast.error(
+            "User already exists. Please try a different username or email.",
+            {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            }
+          );
+        } else {
+          toast.error("Registration failed. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        console.error(error);
+      });
+  };
+
+  // Handler for image change
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result); // This will be the Base64 string
+      };
+      reader.readAsDataURL(file);
     } else {
-      // Show error message if any required field is missing
-      toast.error("Please fill in all required fields.");
+      setSelectedImage(null);
     }
   };
 
-  // Dummy data for facility
-  const facilities = ["Facility A", "Facility B", "Facility C"];
-
+  const handleGetCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await axios.get(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1Ijoic2h1ZW5jZSIsImEiOiJjbG9wcmt3czMwYnZsMmtvNnpmNTRqdnl6In0.vLBhYMBZBl2kaOh1Fh44Bw`
+          );
+          const address = response.data.features[0]?.place_name || "";
+          setAddress(address);
+        } catch (error) {
+          toast.error("Failed to get address from coordinates.");
+          console.error("Error getting address:", error);
+        }
+      }, (error) => {
+        toast.error("Failed to get current location.");
+        console.error("Error getting location:", error);
+      });
+    } else {
+      toast.error("Geolocation is not supported by this browser.");
+    }
+  };
+  
+  
   return (
     <div className="container mx-auto p-8">
-     <ToastContainer />
+      <ToastContainer />
       <h1 className="text-4xl font-bold mb-6 text-center">Laptop Recycling</h1>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Brand Selection */}
+        {/* Model */}
         <div>
-          <label htmlFor="brand" className="block font-semibold mb-1">
-            Select Brand:
+          <label htmlFor="model" className="block font-semibold mb-1">
+            Model:
           </label>
-          <select
-            id="brand"
-            value={selectedBrand}
-            onChange={(e) => handleBrandChange(e.target.value)}
+          <input
+            type="text"
+            id="model"
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
             className="w-full p-2 border rounded"
-          >
-            <option value="">Select Brand</option>
-            {brands.map((brand) => (
-              <option key={brand} value={brand}>
-                {brand}
-              </option>
-            ))}
-          </select>
+          />
         </div>
-
-        
 
         {/* Recycle Item Price */}
         <div>
@@ -121,45 +229,43 @@ const LaptopRecyclingForm = () => {
             value={pickupDate}
             onChange={(e) => setPickupDate(e.target.value)}
             className="w-full p-2 border rounded"
+            min={new Date().toISOString().split("T")[0]} // Set min attribute to today's date
           />
         </div>
-
-        {/* Pickup Time */}
-        <div>
-          <label htmlFor="pickupTime" className="block font-semibold mb-1">
-            Pickup Time:
-          </label>
-          <input
-            type="time"
-            id="pickupTime"
-            value={pickupTime}
-            onChange={(e) => setPickupTime(e.target.value)}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-              <label htmlFor="phone" className="block font-semibold mb-1">
-                Phone:
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full p-2 border rounded"
-              />
-            </div>
 
         {/* Location */}
         <div>
           <label htmlFor="address" className="block font-semibold mb-1">
             Location:
           </label>
+          <div className="flex">
+            <input
+              type="text"
+              id="address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
+            <button
+              type="button"
+              onClick={handleGetCurrentLocation}
+              className="ml-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Use Current Location
+            </button>
+          </div>
+        </div>
+
+        {/* Phone */}
+        <div>
+          <label htmlFor="phone" className="block font-semibold mb-1">
+            Phone:
+          </label>
           <input
-            type="text"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            type="tel"
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             className="w-full p-2 border rounded"
           />
         </div>
@@ -176,12 +282,40 @@ const LaptopRecyclingForm = () => {
             className="w-full p-2 border rounded"
           >
             <option value="">Select Facility</option>
-            {facilities.map((facility) => (
-              <option key={facility} value={facility}>
-                {facility}
-              </option>
-            ))}
+            {nearbyFacilities.length > 0 ? (
+              nearbyFacilities.map((name, index) => (
+                <option key={index} value={name}>
+                  {name}
+                </option>
+              ))
+            ) : (
+              <option value="">No nearby facilities found</option>
+            )}
           </select>
+        </div>
+
+        {/* Image Upload */}
+        <div className="col-span-2">
+          <label htmlFor="image" className="block font-semibold mb-1">
+            Upload Image:
+          </label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full p-2 border rounded"
+          />
+          {selectedImage && (
+            <div className="mt-4 flex justify-center">
+              <img
+                src={selectedImage} // Directly use the Base64 string
+                alt="Selected"
+                className="max-w-xs h-auto rounded"
+              />
+            </div>
+          )}
+
         </div>
 
         {/* Submit Button */}

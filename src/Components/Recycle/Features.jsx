@@ -22,9 +22,9 @@ const elocateFeatures = [
   },
   {
     number: "04",
-    title: "Interactive Chatbot",
+    title: "Contact and Suggestion Portal",
     description:
-      "An intelligent chatbot for immediate access to FAQs and educational resources, fostering awareness.",
+      "A dedicated portal for users to contact us with inquiries and provide suggestions for improving our services.",
   },
   {
     number: "05",
@@ -36,7 +36,7 @@ const elocateFeatures = [
     number: "06",
     title: "Facility Management Dashboard",
     description:
-      "Comprehensive dashboard for facility owners to manage bookings and credits seamlessly.",
+      "Comprehensive dashboard for facility owners to manage bookings.",
   },
 ];
 

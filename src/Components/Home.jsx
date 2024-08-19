@@ -3,7 +3,6 @@ import Image from '../poster.jpg';
 import { Link } from 'react-router-dom';
 import Features from './Recycle/Features';
 import Logo from '../banner.png';
-import Footer from './Footer';
 
 function Home() {
   const [displayText, setDisplayText] = useState('E-Waste Recycling Solution');
@@ -37,7 +36,8 @@ function Home() {
           {displayText}
         </div>
         <div className="text-lg mb-8 text-gray-800">
-          E-Waste EcoFinder: Transforming E-Waste Management. Find E-waste facilities effortlessly with our platform. Your key to responsible recycling and sustainability.
+        ♻️ E-Waste EcoFinder: Revolutionizing E-Waste Management!   
+        🌟 Discover e-waste facilities with ease using our cutting-edge platform. Unlock the power of responsible recycling and champion sustainability, all with a few clicks. Your gateway to a greener future starts here! 🌍
         </div>
         <div className="flex justify-center flex-wrap m-4 space-x-4">
           <Link to='/recycle' className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md text-lg">
@@ -114,7 +114,6 @@ function Home() {
       </div>
     </section>
     <Features/>
-    <Footer/>
     </>
 
     

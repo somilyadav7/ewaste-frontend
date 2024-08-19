@@ -1,23 +1,25 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { registerAPICall } from './Auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { signUp } from './Auth';
-
+import { Link, Navigate } from 'react-router-dom';
 
 const SignUp = () => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
   const [fullName, setFullName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  // const [city, setCity] = useState('');
+  // const [phone, setPhone] = useState('');
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const handleSignUp = (e) => {
     e.preventDefault();
 
-    if (!userName || !email || !password || !phone || !fullName || !confirmPassword) {
+    // Basic field check
+    if (!userName || !email || !password || !fullName || !confirmPassword) {
       toast.error('Please fill in all fields!', {
         position: 'top-right',
         autoClose: 3000,
@@ -30,6 +32,36 @@ const SignUp = () => {
       return;
     }
 
+    // Full name validation (only alphabets)
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!nameRegex.test(fullName)) {
+      toast.error('Full Name must contain only alphabets.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+
+    // Username validation (no spaces)
+    if (/\s/.test(userName)) {
+      toast.error('User Name must not contain spaces.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+
+    // Password match check
     if (password !== confirmPassword) {
       toast.error('Passwords do not match!', {
         position: 'top-right',
@@ -43,32 +75,103 @@ const SignUp = () => {
       return;
     }
 
-    // Implement sign-up logic here
-    console.log('Signing up with:', userName, email, password, phone, fullName);
+    // Phone number validation
+    // const phoneRegex = /^[0-9]{10}$/;
+    // if (!phoneRegex.test(phone)) {
+    //   toast.error('Phone number must be exactly 10 digits.', {
+    //     position: 'top-right',
+    //     autoClose: 3000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //   });
+    //   return;
+    // }
 
-    const userData = { email, password }; // Add other fields similarly
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Please enter a valid email address.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
 
-    // Call signUp function from authService
-    signUp(userData);
-    // Display success message using React Toastify
-    toast.success('Sign up successful!', {
-      position: 'top-right',
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    // Password strength validation
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      toast.error('Password must be at least 8 characters long, contain at least one uppercase letter, and one symbol.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
 
-    // Reset form fields
-    setUserName('');
-    setEmail('');
-    setPassword('');
-    setPhone('');
-    setFullName('');
-    setConfirmPassword('');
+    const register = { name: fullName, username: userName, email, password};
+
+    registerAPICall(register)
+      .then((response) => {
+        toast.success('Registration successful!', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        console.log(response.data);
+
+        setUserName('');
+        setEmail('');
+        setPassword('');
+        setFullName('');
+        setConfirmPassword('');
+        // setPhone('');
+        setIsRegistered(true);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 409) {
+          toast.error('User already exists. Please try a different username or email.', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else {
+          toast.error('Registration failed. Please try again.', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        console.error(error);
+      });
   };
+
+  if (isRegistered) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -76,6 +179,18 @@ const SignUp = () => {
         <h1 className="text-2xl font-bold mb-2 text-center text-blue-700">Welcome to E-Waste EcoFinder</h1>
         <p className="text-lg mb-4 text-center">Please enter your details to register</p>
         <form onSubmit={handleSignUp} className="space-y-4">
+          <div>
+            <label htmlFor="fullName" className="block font-medium">
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="fullName"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+          </div>
           <div>
             <label htmlFor="userName" className="block font-medium">
               User Name
@@ -100,6 +215,30 @@ const SignUp = () => {
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
           </div>
+          {/* <div>
+            <label htmlFor="phone" className="block font-medium">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+          </div> */}
+            {/* <div>
+            <label htmlFor="city" className="block font-medium">
+              City
+            </label>
+            <input
+              type="text"
+              id="city"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+          </div> */}
           <div>
             <label htmlFor="password" className="block font-medium">
               Password
@@ -120,30 +259,6 @@ const SignUp = () => {
                 {showPassword ? 'Hide' : 'Show'} Password
               </button>
             </div>
-          </div>
-          <div>
-            <label htmlFor="phone" className="block font-medium">
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="fullName" className="block font-medium">
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="fullName"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            />
           </div>
           <div>
             <label htmlFor="confirmPassword" className="block font-medium">

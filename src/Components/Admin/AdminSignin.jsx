@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { loginAPICall, setUser, setUserID, setUserName, setFullname, setEmail, setPhoneNumber} from './Auth';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { adminLoginAPICall, setUser, setUserID, setUserName, setFullname, getEmail, getFullname, setEmail} from '../Auth'
+import { useNavigate } from 'react-router-dom'; // Update to use useNavigate
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const SignIn = (props) => {
-  const [email, setEm] = useState('');
-  const [password, setPass] = useState('');
+const AdminSignin = (props) => {
+  const [email, setEmail1] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate(); // Update to use useNavigate
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -16,10 +16,10 @@ const SignIn = (props) => {
     if (email && password) {
       try {
         toast.loading("Loading..");
-        const response = await loginAPICall(email, password);
+        const response = await adminLoginAPICall(email, password);
         const user = response.data;
         console.log(user);
-        //console.log(response);
+        //localStorage.setItem("user", JSON.stringify(user));
 
         if(user){
           setUser(user);
@@ -27,12 +27,11 @@ const SignIn = (props) => {
           setFullname(user.name);
           setEmail(user.email);
           setUserID(user.id);
-          setPhoneNumber(user.phone);
-          props.setUser(user.username);
+          props.setUser(user.name);
         }
 
-
-        //console.log("id "+getUserID);
+        console.log("name"+getFullname());
+        console.log("mail"+getEmail());
         toast.dismiss();
         toast.success('Sign in successful!', {
           position: "top-center",
@@ -40,7 +39,7 @@ const SignIn = (props) => {
           hideProgressBar: true
         });
 
-        navigate('/userprofile');
+        navigate('/adminprofile'); // Use navigate instead of history.push
       } catch (error) {
         toast.dismiss();
         toast.error('Invalid credentials. Please try again.', {
@@ -51,7 +50,7 @@ const SignIn = (props) => {
         console.error(error);
       }
 
-      //console.log('Signing in with:', email, password);
+      console.log('Signing in with:', email, password);
     }
   };
 
@@ -59,7 +58,7 @@ const SignIn = (props) => {
     <>
       <div className="flex items-center justify-center mt-10">
         <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-4 text-blue-700 text-center">Welcome back!</h1>
+          <h1 className="text-3xl font-bold mb-4 text-blue-700 text-center">Welcome Admin</h1>
           <p className="text-lg mb-4 text-center">Please enter your details</p>
           <form onSubmit={handleSignIn} className="space-y-4">
             <div>
@@ -70,7 +69,7 @@ const SignIn = (props) => {
                 type="email"
                 id="email"
                 value={email}
-                onChange={(e) => setEm(e.target.value)}
+                onChange={(e) => setEmail1(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
               />
             </div>
@@ -83,7 +82,7 @@ const SignIn = (props) => {
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   value={password}
-                  onChange={(e) => setPass(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                 />
                 <button
@@ -100,12 +99,6 @@ const SignIn = (props) => {
                 Sign In
               </button>
             </div>
-            <p className="text-sm text-center mt-4">
-              Login as Admin? <Link to="/adminsignin" className="text-blue-500 hover:underline">Click Here</Link>
-            </p>
-            <p className="mt-4">
-              Dont have an account? <Link to='/signup' className="text-blue-500 hover:underline">Sign up</Link>
-            </p>
           </form>
         </div>
         <ToastContainer
@@ -124,4 +117,4 @@ const SignIn = (props) => {
   );
 };
 
-export default SignIn;
+export default AdminSignin;

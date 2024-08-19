@@ -1,8 +1,7 @@
 // BlogDetail.js
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { blogs, randomBlogs } from './blogs';
-import Footer from '../../Footer';
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -55,7 +54,6 @@ const BlogDetail = () => {
         </div>
       </div>
     </div>
-    <Footer/>
     </>
     
   );

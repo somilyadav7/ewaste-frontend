@@ -1,5 +1,4 @@
 import Logo from '../banner.png';
-import Footer from './Footer';
 
 const About = () => {
   return (
@@ -58,7 +57,6 @@ const About = () => {
           </div>
         </div>
       </div>
-      <Footer/>
     </section>
   );
 };

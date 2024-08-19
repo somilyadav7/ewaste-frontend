@@ -1,5 +1,3 @@
-import Footer from "./Footer";
-import React from "react";;
 import { blogs } from "./Blogs";
 
 
@@ -30,7 +28,6 @@ const Ewaste = () => {
         ))}
       </div>
     </div>
-    <Footer/>
     </>
     
   );

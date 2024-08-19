@@ -4,7 +4,7 @@ const blogs = [
   {
     id: 1,
     title: "Understanding E-Waste: A Comprehensive Guide",
-    description:" Understanding E-Waste: A Comprehensive Guide E-waste, the ever-growing mountain of discarded electronic devices, casts a long shadow over our planet.** From smartphones to refrigerators, these once-treasured gadgets become toxic threats if not handled responsibly. But fear not, fellow eco-warriors! This comprehensive guide equips you with the knowledge and tools to navigate the e-waste labyrinth and emerge victorious",
+    description:" Understanding E-Waste: A Comprehensive Guide E-waste, the ever-growing mountain of discarded electronic devices, casts a long shadow over our planet. From smartphones to refrigerators, these once-treasured gadgets become toxic threats if not handled responsibly. But fear not, fellow eco-warriors! This comprehensive guide equips you with the knowledge and tools to navigate the e-waste labyrinth and emerge victorious",
     image: blogImg,
   },
     {
