@@ -153,7 +153,7 @@ const LaptopRecyclingForm = (props) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result); // This will be the Base64 string
+        setSelectedImage(reader.result); 
       };
       reader.readAsDataURL(file);
     } else {

@@ -36,10 +36,10 @@ const AdminOrders = () => {
     async function fetchData() {
       if (order) {
         const res = await axios.get(
-          `http://localhost:8080/api/auth/name/${order.username}`
+          `https://spring-ewaste-b3fwatejf6fff7g6.eastus-01.azurewebsites.net/api/auth/name/${order.username}`
         );
         const res1 = await axios.get(
-          `http://localhost:8080/api/auth/email/${order.username}`
+          `https://spring-ewaste-b3fwatejf6fff7g6.eastus-01.azurewebsites.net/api/auth/email/${order.username}`
         );
         console.log(res.data);
         console.log(res1.data);
