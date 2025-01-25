@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-50 text-black py-8 mt-20">
+    <footer className="bg-blue-50 text-black mt-20">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Footer Top Section */}
         <div className="flex flex-col lg:flex-row justify-between mb-8">
